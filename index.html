@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JUSOL | Ubatuba Beauty</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            overflow-x: hidden;
+            background-color: #fff5f7;
+            color: #4a4a4a;
+            font-family: 'Poppins', sans-serif;
+        }
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            filter: drop-shadow(0 0 10px rgba(255, 182, 193, 0.3));
+        }
+        .content-overlay {
+            position: relative;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .interactive {
+            pointer-events: auto;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 182, 193, 0.2);
+        }
+        .text-gold { color: #D4AF37; }
+        .bg-gold { background-color: #D4AF37; }
+        .bg-pink-soft { background-color: #FFB6C1; }
+        
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            color: #333;
+        }
+
+        /* Estilo Único para a Logo */
+        .logo-container {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin-bottom: -20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-frame {
+            position: absolute;
+            inset: 0;
+            border: 2px solid #D4AF37;
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 70%;
+            animation: morph 8s ease-in-out infinite;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.2);
+        }
+
+        .logo-img-wrapper {
+            position: relative;
+            width: 80%;
+            height: 80%;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-img-wrapper img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
+        }
+
+        @keyframes morph {
+            0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 70%; transform: rotate(0deg); }
+            50% { border-radius: 70% 30% 50% 50% / 30% 60% 40% 70%; transform: rotate(5deg); }
+            100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 70%; transform: rotate(0deg); }
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #D4AF37, #F4CF7D);
+            color: white;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+        }
+        .btn-outline {
+            border: 2px solid #FFB6C1;
+            color: #ea8a9a;
+        }
+        .btn-outline:hover {
+            background-color: #FFB6C1;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="canvas-container"></div>
+
+    <main class="content-overlay">
+        <!-- Hero Section -->
+        <section class="h-screen flex flex-col justify-center items-center text-center px-6">
+            
+            <div class="logo-container interactive mb-4">
+                <div class="logo-frame"></div>
+                <div class="logo-img-wrapper">
+                    <img src="img/LOGO JUSOL.png" alt="Logo JUSOL">
+                </div>
+            </div>
+
+            <h1 class="text-7xl md:text-9xl font-bold mb-2 tracking-widest text-gold" style="text-shadow: 0 10px 20px rgba(0,0,0,0.05);">JUSOL</h1>
+            <p class="text-xl md:text-2xl font-light max-w-2xl text-pink-500 uppercase tracking-widest">Beauty express salon</p>
+            <div class="w-24 h-1 bg-gold my-6 opacity-50"></div>
+            <p class="text-lg md:text-xl font-light max-w-xl opacity-70">Iluminando a sua beleza natural com a sofisticação que merece no litoral Norte.</p>
+            
+            <div class="mt-10 flex flex-col md:flex-row gap-4 interactive">
+                <button onclick="scrollToSection('servicos')" class="px-10 py-4 btn-primary font-semibold rounded-full hover:scale-105 transition-all">Nossos Serviços</button>
+                <button onclick="scrollToSection('contato')" class="px-10 py-4 btn-outline font-semibold rounded-full hover:scale-105 transition-all">Agendar Visita</button>
+            </div>
+        </section>
+
+        <!-- Especialidades -->
+        <section id="servicos" class="min-h-screen py-20 px-6 max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl mb-4 text-gold">Especialidades Capilares</h2>
+                <p class="text-pink-400 italic font-light">Expertise em todas as curvaturas e tons</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 interactive">
+                <div class="glass-card p-8 hover:translate-y-[-10px] transition-all duration-300">
+                    <div class="w-12 h-12 bg-pink-soft rounded-full flex items-center justify-center mb-6 text-white text-2xl">✂️</div>
+                    <h3 class="text-2xl font-bold mb-3">Cortes Premium</h3>
+                    <p class="opacity-70 leading-relaxed mb-4">Do clássico ao vanguardista, cortes que respeitam o caimento natural dos seus fios.</p>
+                    <span class="text-gold font-semibold cursor-pointer">Saber mais →</span>
+                </div>
+
+                <div class="glass-card p-8 hover:translate-y-[-10px] transition-all duration-300">
+                    <div class="w-12 h-12 bg-pink-soft rounded-full flex items-center justify-center mb-6 text-white text-2xl">✨</div>
+                    <h3 class="text-2xl font-bold mb-3">Loiros & Iluminados</h3>
+                    <p class="opacity-70 leading-relaxed mb-4">Técnicas exclusivas para atingir o tom dos sonhos preservando a saúde da fibra.</p>
+                    <span class="text-gold font-semibold cursor-pointer">Saber mais →</span>
+                </div>
+
+                <div class="glass-card p-8 hover:translate-y-[-10px] transition-all duration-300">
+                    <div class="w-12 h-12 bg-pink-soft rounded-full flex items-center justify-center mb-6 text-white text-2xl">🌿</div>
+                    <h3 class="text-2xl font-bold mb-3">Tratamentos Orgânicos</h3>
+                    <p class="opacity-70 leading-relaxed mb-4">Cronogramas personalizados para cabelos que sofrem com a exposição solar constante.</p>
+                    <span class="text-gold font-semibold cursor-pointer">Saber mais →</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contato -->
+        <section id="contato" class="py-20 px-6 text-center">
+            <div class="glass-card max-w-2xl mx-auto p-12 interactive">
+                <h2 class="text-4xl mb-6">Agende o seu horário</h2>
+                <p class="mb-8 opacity-70">Estamos ansiosos por cuidar de si.</p>
+                <a href="https://wa.me/5512987047091" target="_blank" class="inline-block px-12 py-4 btn-primary font-bold rounded-full text-lg hover:scale-110 transition-transform">
+                    WhatsApp (12) 98704-7091
+                </a>
+                <div class="mt-10 pt-10 border-t border-pink-100 flex flex-col gap-2">
+                    <p class="font-bold text-gold">Ubatuba - SP</p>
+                    <p class="text-gold">@jusol_ubatuba</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        let scene, camera, renderer, particles, butterfly;
+        let leftWing, rightWing;
+        let mouseX = 0, mouseY = 0;
+
+        function init3D() {
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0xfff5f7, 0.05);
+
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+            const ambientLight = new THREE.AmbientLight(0xffe4e1, 1.2);
+            scene.add(ambientLight);
+
+            const goldLight = new THREE.PointLight(0xD4AF37, 2, 50);
+            goldLight.position.set(10, 10, 10);
+            scene.add(goldLight);
+
+            // Criação da Borboleta
+            butterfly = new THREE.Group();
+            
+            const wingShape = new THREE.Shape();
+            wingShape.moveTo(0, 0);
+            wingShape.bezierCurveTo(1, 2, 3, 3, 4, 1);
+            wingShape.bezierCurveTo(4, -1, 2, -3, 0, 0);
+
+            const wingGeom = new THREE.ShapeGeometry(wingShape);
+            const wingMat = new THREE.MeshPhongMaterial({ 
+                color: 0xD4AF37, 
+                side: THREE.DoubleSide, 
+                transparent: true, 
+                opacity: 0.8,
+                shininess: 100,
+                wireframe: true 
+            });
+
+            leftWing = new THREE.Mesh(wingGeom, wingMat);
+            rightWing = new THREE.Mesh(wingGeom, wingMat);
+            
+            rightWing.scale.x = -1;
+            
+            const bodyGeom = new THREE.CylinderGeometry(0.1, 0.1, 2, 8);
+            const bodyMat = new THREE.MeshPhongMaterial({ color: 0x333333 });
+            const body = new THREE.Mesh(bodyGeom, bodyMat);
+            body.rotation.x = Math.PI / 2;
+
+            butterfly.add(leftWing);
+            butterfly.add(rightWing);
+            butterfly.add(body);
+            
+            butterfly.scale.set(1.5, 1.5, 1.5);
+            scene.add(butterfly);
+
+            // Partículas
+            const particlesGeometry = new THREE.BufferGeometry();
+            const count = 1000;
+            const positions = new Float32Array(count * 3);
+            const colors = new Float32Array(count * 3);
+
+            for(let i = 0; i < count * 3; i += 3) {
+                positions[i] = (Math.random() - 0.5) * 50;
+                positions[i+1] = (Math.random() - 0.5) * 50;
+                positions[i+2] = (Math.random() - 0.5) * 50;
+
+                const mixedColor = Math.random() > 0.5 ? new THREE.Color(0xFFB6C1) : new THREE.Color(0xD4AF37);
+                colors[i] = mixedColor.r;
+                colors[i+1] = mixedColor.g;
+                colors[i+2] = mixedColor.b;
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            particles = new THREE.Points(particlesGeometry, new THREE.PointsMaterial({
+                size: 0.12,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.4
+            }));
+            scene.add(particles);
+
+            camera.position.z = 15;
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const time = Date.now() * 0.005;
+
+            // Animação das Asas
+            const wingRotation = Math.sin(time * 2) * 0.8;
+            leftWing.rotation.y = wingRotation;
+            rightWing.rotation.y = -wingRotation;
+
+            // Movimento Flutuante da Borboleta
+            butterfly.position.y = Math.sin(time * 0.2) * 2;
+            butterfly.position.x = Math.cos(time * 0.1) * 3;
+            butterfly.rotation.z = Math.sin(time * 0.1) * 0.2;
+            butterfly.rotation.y += 0.01;
+
+            particles.rotation.y += 0.0005;
+
+            camera.position.x += (mouseX * 0.05 - camera.position.x) * 0.03;
+            camera.position.y += (-mouseY * 0.05 - camera.position.y) * 0.03;
+            camera.lookAt(scene.position);
+
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX - window.innerWidth / 2) / 50;
+            mouseY = (e.clientY - window.innerHeight / 2) / 50;
+        });
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        window.onload = () => {
+            init3D();
+            animate();
+        };
+    </script>
+</body>
+</html>
